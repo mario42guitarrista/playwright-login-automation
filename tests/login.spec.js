@@ -1,4 +1,4 @@
-const { test } = require('@playwright/test')
+const { test, expect } = require('@playwright/test')
 const { LoginPage } = require('../pages/LoginPage')
 const { InventoryPage } = require('../pages/InventoryPage')
 const { CartPage } = require('../pages/CartPage')
@@ -28,4 +28,19 @@ test('Fluxo completo de compra', async ({ page }) => {
   await checkoutPage.validateCheckoutOverviewPageLoaded()
   await checkoutPage.finishPurchase()
   await checkoutPage.validateSuccess()
+
+  const { expect } = require('@playwright/test')
+
+  })
+
+// TESTE NEGATIVO  
+
+test('Login inválido deve exibir mensagem de erro', async ({ page }) => {
+  const loginPage = new LoginPage(page)
+
+  await loginPage.open()
+  await loginPage.login('standard_user', 'senha_errada')
+
+  await expect(loginPage.errorMessage).toBeVisible()
+  await expect(loginPage.errorMessage).toContainText('Username and password do not match')
 })
