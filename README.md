@@ -1,18 +1,46 @@
-# Playwright Login Automation
+# Playwright E2E Automation - E-commerce Flow
 
-Automação de testes E2E usando Playwright.
+End-to-end test automation project using Playwright, simulating a complete e-commerce purchase flow with validations and negative scenarios.
 
-## 📌 Cenários testados
-- Login com sucesso
-- Login com senha inválida
-- Login com campos vazios
+## 🚀 Features
 
-## 🚀 Tecnologias
+This project automates a full user journey:
+
+- Login with valid credentials
+- Add product to cart
+- Validate cart badge and product
+- Navigate to checkout
+- Fill customer information
+- Complete purchase
+- Validate success message
+
+## ✅ Test Coverage
+
+### Positive Scenario
+- Successful login
+- Product added to cart
+- Full checkout flow completed
+- Order confirmation validated
+
+### Negative Scenario
+- Invalid login attempt
+- Error message validation
+
+## 🧠 Concepts Applied
+
+- Page Object Model (POM)
+- End-to-End Testing (E2E)
+- Assertions with Playwright
+- Test structure and organization
+- UI automation best practices
+
+## 🛠️ Tech Stack
+
 - Playwright
-- JavaScript
-- Node.js
+- JavaScript (Node.js)
+- Git & GitHub
 
-## ▶️ Como executar
+## ▶️ How to Run
 
 ```bash
 npm install
