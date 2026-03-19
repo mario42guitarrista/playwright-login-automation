@@ -1,30 +1,31 @@
-const { test, expect } = require('@playwright/test');
+const { test } = require('@playwright/test')
+const { LoginPage } = require('../pages/LoginPage')
+const { InventoryPage } = require('../pages/InventoryPage')
+const { CartPage } = require('../pages/CartPage')
+const { CheckoutPage } = require('../pages/CheckoutPage')
 
-test('login com sucesso', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
+test('Fluxo completo de compra', async ({ page }) => {
+  const loginPage = new LoginPage(page)
+  const inventoryPage = new InventoryPage(page)
+  const cartPage = new CartPage(page)
+  const checkoutPage = new CheckoutPage(page)
 
-  await page.locator('[data-test="username"]').fill('standard_user');
-  await page.locator('[data-test="password"]').fill('secret_sauce');
-  await page.locator('[data-test="login-button"]').click();
+  await loginPage.open()
+  await loginPage.login('standard_user', 'secret_sauce')
 
-  await expect(page).toHaveURL(/inventory/);
-  await expect(page.locator('.title')).toHaveText('Products');
-});
+  await inventoryPage.validateInventoryPageLoaded()
+  await inventoryPage.addProductToCart()
+  await inventoryPage.validateCartBadge('1')
+  await inventoryPage.goToCart()
 
-test('login com senha inválida', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
+  await cartPage.validateCartPageLoaded()
+  await cartPage.validateProductInCart()
+  await cartPage.goToCheckout()
 
-  await page.locator('[data-test="username"]').fill('standard_user');
-  await page.locator('[data-test="password"]').fill('senha_errada');
-  await page.locator('[data-test="login-button"]').click();
+  await checkoutPage.validateCheckoutInfoPageLoaded()
+  await checkoutPage.fillCheckoutInfo()
 
-  await expect(page.locator('[data-test="error"]')).toBeVisible();
-});
-
-test('login com campos vazios', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-
-  await page.locator('[data-test="login-button"]').click();
-
-  await expect(page.locator('[data-test="error"]')).toBeVisible();
-});
+  await checkoutPage.validateCheckoutOverviewPageLoaded()
+  await checkoutPage.finishPurchase()
+  await checkoutPage.validateSuccess()
+})
